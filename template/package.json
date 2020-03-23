@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "{{name}}",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "TBD",
+  "main": "build/index.js",
+  "module": "src/index.js",
+  "scripts": {
+    "build": "zimlet build && cp .netlify/* build",
+    "watch": "zimlet watch",
+    "start": "zimlet watch",
+    "package": "zimlet package --name $npm_package_name --description $npm_package_description --pkg-version $npm_package_version --zimbraXVersion '^2.0.0'",
+    "lint": "eslint src",
+    "lint:fix": "npm run lint -- --fix",
+    "security:audit": "audit-ci --moderate --report"
+  },
+  "keywords": [
+    "zimlet",
+    "ZimbraX",
+    "Zimbra"
+  ],
+  "author": "",
+  "eslintConfig": {
+    "extends": "eslint-config-synacor"
+  },
+  "devDependencies": {
+    "@zimbra/zimlet-cli": "^8.0.0",
+    "audit-ci": "^2.5.1",
+    "eslint": "^6.8.0",
+    "prettier-eslint": "^9.0.1",
+    "eslint-config-synacor": "^3.0.5",
+    "eslint-plugin-preact-i18n": "^1.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-prettier": "^3.1.2"
+  },
+  "dependencies": {
+    "@zimbra/x-ui": "^2.2.0"
+  }
+}
