@@ -351,7 +351,7 @@ import MoreMenu from '../more-menu';
 
 export default function createMore(context, menuItemText) {
 	return props => (
-		<MoreMenu {...props}>{context}{menuItemText}</MoreMenu>
+		<MoreMenu {...props}>{{context, menuItemText}}</MoreMenu>
 	);
 }
 ```
@@ -366,8 +366,8 @@ The MoreMenu component in `src/components/more-menu/index.js` takes care of the 
 export default class MoreMenu extends Component {
     constructor(props) {
         super(props);
-        this.zimletContext = props.children[0];
-        this.menuItemText = props.children[1];
+        this.zimletContext = props.children.context;
+        this.menuItemText = props.children.menuItemText;
     };
 ```
 
