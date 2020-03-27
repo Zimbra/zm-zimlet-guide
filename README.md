@@ -208,7 +208,7 @@ To open the `mytest` Zimlet in Visual Studio Code click File -> Open Folder and 
 
 Zimlets are essentially Preact components that run in a sandbox within the Zimbra web application. Throughout the Zimbra application, there are hooks made available to Zimlets for injecting components into the application. These hooks are called ZimletSlots.
 
-To see which slots are available in the UI, add `?zimletSlots=show` to the end of the URL of Zimbra. This will show all of the places in the active UI where ZimletSlots are available. This requires the sideloader Zimlet to be enabled on your account.
+To see which slots are available in the UI, add `?zimletSlots=show` to the end of the URL of Zimbra. This will show all of the places in the active UI where ZimletSlots are available.
 
 ![](screenshots/09-Zimlet-Slots.png)
 
@@ -253,9 +253,9 @@ Take a look at package.json and make sure you do not include dependencies that a
 
 ## Gotchas
 
-  - A lot of React code examples use setState to trigger re-rendering of components. In Preact setState is asynchronous. Be careful when using it and avoid it if you can.
-  - The Zimlet is Sandboxed and runs in a separate environment that feels like an iframe. You cannot use global variables like window.location to get anything done.
-  - Interacting with the DOM directly will not work in most cases as that is abstracted away by the framework.
+  - A lot of React code examples use setState to trigger re-rendering of components. Be careful when using it as it works asynchronous and avoid it if you can.
+  - The Zimlet is Sandboxed and runs in a separate environment that feels like an iframe. Global variables like window.location can be accessed using window.parent.location.
+  - Interacting with the DOM directly will not work in most cases as that is abstracted away by the framework. If you really must you can do things like  window.parent.querySelectorAll and window.parent.document.body.appendChild.
 
 ## Analyzing the Zimlet
 
@@ -385,6 +385,8 @@ Similar to to more menu a new tab is added to the UI. The `mytest` tab is regist
 ```javascript
 import { SLUG } from "./constants";
 import { MenuItem } from "@zimbra-client/components";
+
+const { plugins } = context;
 plugins.register("slot::menu", CustomMenuItem);
 
 // Register a new route with the preact-router instance
@@ -472,3 +474,7 @@ You can now invoke Zimlet CLI using:
       npm install
 
 The *zimlet* command uses *gittar* to fetch a tgz compressed archive from Github. Gittar falls back to the locally available master.tar.gz because we have rejected network access to it by the use of the *unshare* command. Notice the additional option `-i false` to instruct Zimlet CLI not to install npm dependencies it will not work without network access. To install the dependencies we run `npm install` manually.
+
+## Further reading
+
+https://github.com/Zimbra/zimlet-cli/wiki
