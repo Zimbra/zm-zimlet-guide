@@ -58,9 +58,12 @@ More information can be found in https://github.com/Zimbra/zm-extension-guide.
 
 ## Deploy the Zimlet Sideloader
 
-You need to deploy and enable the Zimlet Sideloader on your development server. You only have to do this step once. The Sideloader is installed like any other Zimlet with `zmzimletctl` from the Zimbra user:
+You need to deploy and enable the Zimlet Sideloader on your development server. You only have to do this step once. 
 
-      zmzimletctl deploy zm-x-zimlet-sideloader.zip
+      yum install zimbra-zimlet-sideloader
+      apt install zimbra-zimlet-sideloader
+      su - zimbra
+      zmmailboxdctl restart
 
 ![](screenshots/01-COS-Zimlet.png)
 *Verify that the Sideloader Zimlet is available and enabled for your Zimbra Class of Service (CoS) by logging into the Admin UI -> Home -> Configure -> Class of Service.*
