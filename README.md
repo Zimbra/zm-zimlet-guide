@@ -478,6 +478,16 @@ You can now invoke Zimlet CLI using:
 
 The *zimlet* command uses *gittar* to fetch a tgz compressed archive from Github. Gittar falls back to the locally available master.tar.gz because we have rejected network access to it by the use of the *unshare* command. Notice the additional option `-i false` to instruct Zimlet CLI not to install npm dependencies it will not work without network access. To install the dependencies we run `npm install` manually.
 
+## Testing considerations
+Now that you have completed your Zimlet, don't forget to test it
+
+- on the latest version of Chrome, Firefox, Safari, and MS Edge, and
+- with multiple languages.
+
+## Web Accessibility
+
+Please take a look at [Web Accessibility](https://www.w3.org/WAI/fundamentals/accessibility-intro/) and see what you can do so that people with disabilities can use your Zimlet.
+
 ## Further reading
 
 https://github.com/Zimbra/zimlet-cli/wiki
