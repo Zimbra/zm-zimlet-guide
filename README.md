@@ -414,7 +414,7 @@ CustomMenuItem holds the HTML loaded into the slot and has the HTML link to our 
 
 To create a Zimlet zip file to be used with `zmzimletctl deploy` you can use `zimlet package` command. The zip will be in the `pkg` folder:
 
-      zimlet package -v 0.0.1 --zimbraXVersion ">=0.0.1" -n "mytest-zimlet" --desc "A test Zimlet"
+      zimlet package -v 0.0.1 --zimbraXVersion ">=0.0.1" -n "mytest-zimlet" --desc "A Zimlet to learn about Zimbra Zimlets" -l "Test Zimlet"
 
 ## Use a trusted SSL certificate for Zimlet CLI
 
@@ -450,23 +450,23 @@ master.tar.gz
         ├── package.json
         ├── README.md
         ├── src
-        │   ├── components
-        │   │   ├── app
-        │   │   │   ├── index.js
-        │   │   │   └── style.less
-        │   │   ├── more
-        │   │   │   └── index.js
-        │   │   └── more-menu
-        │   │       ├── index.js
-        │   │       └── style.less
-        │   ├── constants
-        │   │   └── index.js
-        │   ├── enhancers.js
-        │   ├── index.js
-        │   ├── intl
-        │   │   └── en_US.json
-        │   └── public
-        │       └── styles.css
+        │   ├── components
+        │   │   ├── app
+        │   │   │   ├── index.js
+        │   │   │   └── style.less
+        │   │   ├── more
+        │   │   │   └── index.js
+        │   │   └── more-menu
+        │   │       ├── index.js
+        │   │       └── style.less
+        │   ├── constants
+        │   │   └── index.js
+        │   ├── enhancers.js
+        │   ├── index.js
+        │   ├── intl
+        │   │   └── en_US.json
+        │   └── public
+        │       └── styles.css
         ├── tsconfig.json
         └── zimlet.config.js
 ```
