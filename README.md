@@ -146,6 +146,7 @@ Zimlet CLI will replace all occurrences of `{{name}}` in the template when it ru
       sed -i 's/{{name}}/mytest/g' src/constants/index.js
       sed -i 's/{{name}}/mytest/g' src/intl/en_US.json
       sed -i 's/{{name}}/mytest/g' src/index.js
+      sed -i 's/{{name}}/mytest/g' src/public/styles.css
 
 Next we can build the `mytest` Zimlet:
 
