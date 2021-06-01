@@ -46,7 +46,7 @@ export default function Zimlet(context) {
 	const CustomMenuItem = withIntl()(() => (
 		// List of components can be found in zm-x-web, zimlet-manager/shims.js, and more can be added if needed
 		<MenuItem responsive href={`/${SLUG}`}>
-			<span className="appIcon{{name}}"></span><b>
+			<span className="appIconMyTest"></span><b>
 			<Text id={`app.menuItem`} /></b>
 		</MenuItem>
 	));

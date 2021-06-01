@@ -50,7 +50,7 @@ export default class MoreMenu extends Component {
                         <div style="background-color: #eeeeee; padding:5px; font-family:monospace; margin:4px, 4px; width: 600px; height: 300px; overflow-x: hidden; overflow-x: auto; text-align:justify;" id="serverResponse">{response}</div>
 						Router demo: <span style="color:blue; text-decoration:underline; cursor:pointer" onClick={this.handleLinkClick}>{SLUG}</span>
                     </div>
-                    <footer class="zimbra-client_modal-dialog_footer" id="nextcloudDialogButtons"><button type="button" onClick={this.handleClose} class="blocks_button blocks_button_regular">OK</button></footer>
+                    <footer class="zimbra-client_modal-dialog_footer" id="nextcloudDialogButtons"><button type="button" onClick={this.handleClose} class="blocks_button_button blocks_button_primary blocks_button_regular zimbra-client_sidebar-primary-button_button">OK</button></footer>
                 </div>
             </ModalDialog>
         );

@@ -25,6 +25,8 @@ This article uses the `Mytest` back-end from the guide for back-end extensions a
 
 ## Enable multipart/form-data on Zimbra Extensions
 
+If you are using a new installation of Zimbra 9, multipart/form-data is enabled by default and you can skip this step. 
+
 Enable multipart-config on your test server to enable processing of JSON and binary files in a single HTTP request. Append the following:
 
 ```xml
@@ -122,38 +124,15 @@ Options:
   --dest         Directory to create the zimlet
 ```
 
-Zimlet CLI creates Zimlets from templates. Templates are downloaded from Github. To use a template from https://github.com/exampleuser/exampletemplate you should:
+## Downloading and running the MyTest Zimlet
 
-      zimlet create exampleuser/exampletemplate mytest
-
-By default it downloads from *zimbra* so to use https://github.com/Zimbra/zm-x-zimlet-template-default you can do:
-
-      zimlet create zm-x-zimlet-template-default mytest
-
-At the end of this article there is a chapter that explains how to use templates from Bitbucket, Gitlab or any other (on-premise) versioning system. 
-
-## Creating the mytest Zimlet
-
-Create a folder on your local computer to store the `mytest` Zimlet:
+Create a folder on your local computer to store the MyTest Zimlet:
 
       mkdir ~/zimbra_zimletx_course
       cd ~/zimbra_zimletx_course
-      zimlet create zm-zimlet-guide mytest
-
-Zimlet CLI will replace all occurrences of `{{name}}` in the template when it runs, but it has a bug and some files are skipped. We can manually patch those:
-
-      cd mytest
-      sed -i 's/{{name}}/mytest/g' src/constants/index.js
-      sed -i 's/{{name}}/mytest/g' src/intl/en_US.json
-      sed -i 's/{{name}}/mytest/g' src/index.js
-      sed -i 's/{{name}}/mytest/g' src/public/styles.css
-
-Next we can build the `mytest` Zimlet:
-
-      zimlet build
-      
-Finally we can start a Webpack Dev server on our local machine:
-
+      git clone https://github.com/Zimbra/zm-zimlet-guide
+      cd zm-zimlet-guide
+      npm install
       zimlet watch
 
 The output of this command should be:
@@ -167,11 +146,13 @@ Local:            https://localhost:8081/index.js
 On Your Network:  https://192.168.1.100:8081/index.js
 ```
 
-Visit https://localhost:8081/index.js in your browser and accept the self-signed certificate. The index.js is a packed version of the `mytest` Zimlet you just created. At the end of this article there is a chapter that explains how to use a valid SSL certificate. 
+Visit https://localhost:8081/index.js in your browser and accept the self-signed certificate. The index.js is a packed version of the `MyTest Zimlet`. More information about using SSL certificates can be found below. 
 
-## Sideload the mytest Zimlet
+Have you already used Zimlet Cli in the past? Make sure to update it using `sudo npm install -g @zimbra/zimlet-cli`. You can check your version using `zimlet --version`. You will need version `12.8.0` of Zimlet Cli for this Zimlet to work.
 
-Log on to your Zimbra development server and make sure that you are seeing the modern UI. Then append `/sdk/zimlets` to the URL.
+## Sideload the MyTest Zimlet
+
+Log on to your Zimbra development server and make sure that you are seeing the modern UI. Then click the Jigsaw puzzle icon and Zimlets Sideloader. If you are not seeing the Zimlet Sideloader menu. You have to run `apt/yum install zimbra-zimlet-sideloader` on your Zimbra server and enable the Sideloader Zimlet in your Class of Service.
 
 > ![](screenshots/03-Sideload.png)
 *Sideload the `mytest` Zimlet by clicking Load Zimlet. The Zimlet is now added to the Zimbra UI in real-time. No reload is necessary.*
@@ -204,7 +185,7 @@ Visual Studio Code is an integrated development environment (IDE). It supports R
 
 Go to https://code.visualstudio.com/ and install Visual Studio Code on your local computer.
 
-To open the `mytest` Zimlet in Visual Studio Code click File -> Open Folder and select ~/zimbra_zimletx_course/mytest/
+To open the `mytest` Zimlet in Visual Studio Code click File -> Open Folder and select ~/zimbra_zimletx_course/zm-zimlet-guide/
 
 ![](screenshots/08-VSCode.png)
 *Visual Studio Code with the `mytest` Zimlet loaded, pretty much works out of the box.*
@@ -429,56 +410,6 @@ By default Zimlet-CLI will generate a self-signed certificate. Web browsers will
                  '/usr/local/lib/node_modules/@zimbra/zimlet-cli/node_modules/webpack-dev-server/ssl/server.pem'
       export HOST=zimlets.example.com && zimlet watch
 
-
-## Using Zimlet CLI templates from Bitbucket, Gitlab and others
-
-You can use Zimlet CLI with Zimlet templates from Bitbucket, Gitlab, on premise git or a local folder. To do this you need to create a `master.tar.gz` in a folder structure like this:
-
-```
-~/.gittar/
-└── github
-    └── zimbra
-        └── my-private-zimlet
-            └── master.tar.gz
-```
-
-master.tar.gz must have a structure like below and the name of `my-private-zimlet` must correspond with the folder structure above. The `template` folder must be present:
-
-```
-master.tar.gz
-└── my-private-zimlet
-    ├── LICENSE
-    └── template
-        ├── package.json
-        ├── README.md
-        ├── src
-        │   ├── components
-        │   │   ├── app
-        │   │   │   ├── index.js
-        │   │   │   └── style.less
-        │   │   ├── more
-        │   │   │   └── index.js
-        │   │   └── more-menu
-        │   │       ├── index.js
-        │   │       └── style.less
-        │   ├── constants
-        │   │   └── index.js
-        │   ├── enhancers.js
-        │   ├── index.js
-        │   ├── intl
-        │   │   └── en_US.json
-        │   └── public
-        │       └── styles.css
-        ├── tsconfig.json
-        └── zimlet.config.js
-```
-
-You can now invoke Zimlet CLI using:
-
-      unshare -n -r zimlet create my-private-zimlet mynewzimlet -i false
-      npm install
-
-The *zimlet* command uses *gittar* to fetch a tgz compressed archive from Github. Gittar falls back to the locally available master.tar.gz because we have rejected network access to it by the use of the *unshare* command. Notice the additional option `-i false` to instruct Zimlet CLI not to install npm dependencies it will not work without network access. To install the dependencies we run `npm install` manually.
 
 ## Testing considerations
 Now that you have completed your Zimlet, don't forget to test it
