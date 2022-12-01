@@ -55,7 +55,7 @@ More information can be found in https://github.com/Zimbra/zm-extension-guide.
 
 You need to deploy and enable the Zimlet Sideloader on your development server. You only have to do this step once. 
 
-      sudo jyum install zimbra-zimlet-sideloader
+      sudo yum install zimbra-zimlet-sideloader
       sudo apt install zimbra-zimlet-sideloader
       su - zimbra
       zmmailboxdctl restart
