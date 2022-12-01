@@ -14,7 +14,13 @@ To follow the steps in this article you need a Zimbra test server. You also need
 
 ## Deploy Mytest back-end
 
-This article uses the `Mytest` back-end from the guide for back-end extensions at https://github.com/Zimbra/zm-extension-guide.
+This article uses the `Mytest` back-end from the guide for back-end extensions at https://github.com/Zimbra/zm-extension-guide. Install a pre-compiled version to be sure you have it on your development server:
+
+      sudo rm -Rf /opt/zimbra/lib/ext/mytest
+      sudo mkdir /opt/zimbra/lib/ext/mytest
+      sudo wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.8/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar
+      su - zimbra
+      zmmailboxdctl restart
 
 ## Enable multipart/form-data on Zimbra Extensions
 
