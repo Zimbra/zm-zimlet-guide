@@ -1,4 +1,4 @@
-# Zimbra Preact Zimlet
+# Zimbra Preact Zimlet advanced
 
 One of the powers of Zimbra is the ability to be extended with custom functionality. The Zimbra front-end can be extended with JavaScript Zimlets and the back-end can be extended with Java extensions. This article is a practical guide to writing Preact Zimlets for Zimbra 9 and above.
 
@@ -18,9 +18,8 @@ This article uses the `Mytest` back-end from the guide for back-end extensions a
 
       sudo rm -Rf /opt/zimbra/lib/ext/mytest
       sudo mkdir /opt/zimbra/lib/ext/mytest
-      wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.2/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar      
-      su zimbra
-      cd /tmp
+      sudo wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.8/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar      
+      su - zimbra
       zmmailboxdctl restart
 
 ## Enable multipart/form-data on Zimbra Extensions
@@ -62,8 +61,8 @@ More information can be found in https://github.com/Zimbra/zm-extension-guide.
 
 You need to deploy and enable the Zimlet Sideloader on your development server. You only have to do this step once. 
 
-      yum install zimbra-zimlet-sideloader
-      apt install zimbra-zimlet-sideloader
+      sudo yum install zimbra-zimlet-sideloader
+      sudo apt install zimbra-zimlet-sideloader
       su - zimbra
       zmmailboxdctl restart
 
@@ -84,6 +83,8 @@ As root:
       yum install nodejs
       apt install nodejs
       npm install -g @zimbra/zimlet-cli
+
+> :warning: Make sure to install nodejs version 14.x or higher.
 
 ## Zimlet CLI
 
@@ -186,7 +187,7 @@ Visual Studio Code is an integrated development environment (IDE). It supports R
 
 Go to https://code.visualstudio.com/ and install Visual Studio Code on your local computer.
 
-To open the `mytest` Zimlet in Visual Studio Code click File -> Open Folder and select ~/zimbra_zimletx_course/zm-zimlet-guide/
+To open the `mytest` Zimlet in Visual Studio Code click File -> Open Folder and select ~/zimbra_zimletx_course/zm-zimlet-guide/advanced/
 
 ![](screenshots/08-VSCode.png)
 *Visual Studio Code with the `mytest` Zimlet loaded, pretty much works out of the box.*
@@ -330,7 +331,9 @@ The `mytest` item in the More menu is registered in the main index.js with these
 import createMore from "./components/more";
 const moreMenu = createMore(context, <Text id={`app.menuItem`}/>);
 ```
-`<Text>` is a helper component to get a string in the language preferred by the user. See `src/intl/en_US.json`. createMore is imported from `src/components/more/index.js` and is included here for reference:
+`<Text>` is a helper component to get a string in the language preferred by the user. See `src/intl/en_US.json`. You can apply the translated strings by the language specific files, such as `src/intl/ja.json`.
+
+createMore is imported from `src/components/more/index.js` and is included here for reference:
 
 ```javascript
 import { createElement } from 'preact';
