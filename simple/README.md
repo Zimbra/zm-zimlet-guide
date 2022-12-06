@@ -18,9 +18,8 @@ This article uses the `Mytest` back-end from the guide for back-end extensions a
 
       sudo rm -Rf /opt/zimbra/lib/ext/mytest
       sudo mkdir /opt/zimbra/lib/ext/mytest
-      wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.2/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar      
-      su zimbra
-      cd /tmp
+      sudo wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.8/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar
+      su - zimbra
       zmmailboxdctl restart
 
 ## Enable multipart/form-data on Zimbra Extensions
@@ -62,10 +61,12 @@ More information can be found in https://github.com/Zimbra/zm-extension-guide.
 
 You need to deploy and enable the Zimlet Sideloader on your development server. You only have to do this step once. 
 
-      yum install zimbra-zimlet-sideloader
-      apt install zimbra-zimlet-sideloader
+      sudo yum install zimbra-zimlet-sideloader
+      sudo apt install zimbra-zimlet-sideloader
       su - zimbra
       zmmailboxdctl restart
+
+If you are using a new installation of Zimbra 9 or above, you don't need to restart the mailbox server (the installer does for you).
 
 ![](screenshots/01-COS-Zimlet.png)
 *Verify that the Sideloader Zimlet is available and enabled for your Zimbra Class of Service (CoS) by logging into the Admin UI -> Home -> Configure -> Class of Service.*
@@ -84,6 +85,8 @@ As root:
       yum install nodejs
       apt install nodejs
       npm install -g @zimbra/zimlet-cli
+
+> :warning: Make sure to install nodejs version 14.x or higher.
 
 ## Zimlet CLI
 
@@ -330,7 +333,9 @@ The `mytest` item in the More menu is registered in the main index.js with these
 import createMore from "./components/more";
 const moreMenu = createMore(context, <Text id={`app.menuItem`}/>);
 ```
-`<Text>` is a helper component to get a string in the language preferred by the user. See `src/intl/en_US.json`. createMore is imported from `src/components/more/index.js` and is included here for reference:
+`<Text>` is a helper component to get a string in the language preferred by the user. See `src/intl/en_US.json`. You can apply the translated strings by the language specific files, such as `src/intl/ja.json`.
+
+createMore is imported from `src/components/more/index.js` and is included here for reference:
 
 ```javascript
 import { createElement } from 'preact';
