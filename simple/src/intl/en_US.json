@@ -1,6 +1,9 @@
 {
-	"app": {
-		"menuItem": "MyTest"
-      }
+  "zimlet": {
+    "label": "Test Zimlet",
+    "description": "A Zimlet to learn about Zimbra Zimlets"
+  },
+  "app": {
+    "menuItem": "MyTest"
+  }
 }
-
