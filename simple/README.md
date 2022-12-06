@@ -66,8 +66,6 @@ You need to deploy and enable the Zimlet Sideloader on your development server. 
       su - zimbra
       zmmailboxdctl restart
 
-If you are using a new installation of Zimbra 9 or above, you don't need to restart the mailbox server (the installer does for you).
-
 ![](screenshots/01-COS-Zimlet.png)
 *Verify that the Sideloader Zimlet is available and enabled for your Zimbra Class of Service (CoS) by logging into the Admin UI -> Home -> Configure -> Class of Service.*
 
