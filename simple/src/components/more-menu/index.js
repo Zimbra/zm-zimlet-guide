@@ -48,7 +48,7 @@ export default class MoreMenu extends Component {
                 <div class="zimbra-client_modal-dialog_inner"><header class="zimbra-client_modal-dialog_header"><h2>this.props.emailData:</h2><button onClick={this.handleClose} aria-label="Close" class="zimbra-client_close-button_close zimbra-client_modal-dialog_actionButton"><span role="img" class="zimbra-icon zimbra-icon-close blocks_icon_md"></span></button></header>
                     <div class="zimbra-client_modal-dialog_content zimbra-client_language-modal_languageModalContent">
                         <div style="background-color: #eeeeee; padding:5px; font-family:monospace; margin:4px, 4px; width: 600px; height: 300px; overflow-x: hidden; overflow-x: auto; text-align:justify;" id="serverResponse">{response}</div>
-						Router demo: <span style="color:blue; text-decoration:underline; cursor:pointer" onClick={this.handleLinkClick}>{SLUG}</span>
+						Router demo: <span style="color:blue; text-decoration:underline; cursor:pointer" onClick={this.handleLinkClick}>{SLUG}</span><br/><br/><br/><br/>
                     </div>
                     <footer class="zimbra-client_modal-dialog_footer" id="nextcloudDialogButtons"><button type="button" onClick={this.handleClose} class="blocks_button_button blocks_button_primary blocks_button_regular zimbra-client_sidebar-primary-button_button">OK</button></footer>
                 </div>
