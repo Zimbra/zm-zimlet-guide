@@ -25,16 +25,14 @@
     "extends": "eslint-config-synacor"
   },
   "devDependencies": {
-    "@zimbra/zimlet-cli": "^12.7.0",
-    "audit-ci": "^2.5.1",
-    "eslint": "^6.8.0",
-    "prettier-eslint": "^9.0.1",
+    "@zimbra/zimlet-cli": "^14.0.0",
+    "audit-ci": "^6.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-synacor": "^3.0.5",
-    "eslint-plugin-preact-i18n": "^1.0.1",
-    "eslint-config-prettier": "^6.10.0",
-    "eslint-plugin-prettier": "^3.1.2"
-  },
-  "dependencies": {
-    "@zimbra/x-ui": "^2.2.0"
+    "eslint-plugin-preact-i18n": "^1.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier-eslint": "^13.0.0"
   }
 }
