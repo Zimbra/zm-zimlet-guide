@@ -33,7 +33,7 @@ export default function Zimlet(context) {
 	exports.init = function init() {
 		// The zimlet slots to load into, and what is being loaded into that slot
 		// (CustomMenuItem and Router are both defined below)
-		plugins.register('slot::menu', CustomMenuItem);
+		plugins.register('slot::integrations-tab-item', CustomMenuItem);
 
 		// Only needed if you need to create a new url route, like for a menu tab, or print, etc
 		plugins.register('slot::routes', Router);
@@ -45,14 +45,14 @@ export default function Zimlet(context) {
 
 	// Register a new route with the preact-router instance
 	function Router() {
-		return [<App path={'/MyTest'} />];
+		return [<App path={'/integrations/MyTest'} />];
 	}
 
 	// Create a main nav menu item.
 	// withIntl should be used on every component registered via plugins.register(). You will see this in the App index.js file as well
 	const CustomMenuItem = withIntl()(() => (
 		// List of components can be found in zm-x-web, zimlet-manager/shims.js, and more can be added if needed
-		<MenuItem responsive href={'/MyTest'}>
+		<MenuItem responsive href={'/integrations/MyTest'}>
 			<span className='appIconMyTest'></span><b>
 				<Text id={'zimbra-zimlet-mytest.menuItem'} /></b>
 		</MenuItem>

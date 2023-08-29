@@ -2,7 +2,7 @@
 
 One of the powers of Zimbra is the ability to be extended with custom functionality. The Zimbra front-end can be extended with JavaScript Zimlets and the back-end can be extended with Java extensions. This article is a practical guide to writing Preact Zimlets for Zimbra 9 and above.
 
-Zimbra 9 introduces the so-called Modern UI. The Modern UI is fully responsive and based on Preact. Preact itself is based on React and that is a framework for building applications on Node JS. 
+Zimbra 9 introduced the so-called Modern UI. The Modern UI is fully responsive and based on Preact. Preact itself is based on React and that is a framework for building applications on Node JS. 
 
 You will need to understand the basics of React, have some knowledge of ES6 JavaScript and NodeJS to be able to understand the sample code in this article. A good online course that can help you with these fundamentals can be found at https://www.udemy.com/course/the-complete-react-fullstack-course/
 
@@ -21,41 +21,6 @@ This article uses the `Mytest` back-end from the guide for back-end extensions a
       sudo wget https://github.com/Zimbra/zm-extension-guide/releases/download/0.0.8/mytest.jar -O /opt/zimbra/lib/ext/mytest/mytest.jar      
       su - zimbra
       zmmailboxdctl restart
-
-## Enable multipart/form-data on Zimbra Extensions
-
-If you are using a new installation of Zimbra 9, multipart/form-data is enabled by default and you can skip this step. 
-
-Enable multipart-config on your test server to enable processing of JSON and binary files in a single HTTP request. Append the following:
-
-```xml
-   <multipart-config>
-   </multipart-config>
-```
-
-To the `ExtensionDispatcherServlet` in the files:
-
-   - /opt/zimbra/jetty_base/etc/service.web.xml.in
-   - /opt/zimbra/jetty_base/webapps/service/WEB-INF/web.xml
-
-Restart Zimbra with `zmcontrol restart`. The final result looks like this on 8.8.15 patch 8:
-
-```xml
-  <servlet>
-    <servlet-name>ExtensionDispatcherServlet</servlet-name>
-    <servlet-class>com.zimbra.cs.extension.ExtensionDispatcherServlet</servlet-class>
-    <async-supported>true</async-supported>
-    <load-on-startup>2</load-on-startup>
-    <init-param>
-      <param-name>allowed.ports</param-name>
-      <param-value>8080, 8443, 7071, 7070, 7072, 7443</param-value>
-    </init-param>
-  <multipart-config>
-  </multipart-config>
-  </servlet>
-```
-
-More information can be found in https://github.com/Zimbra/zm-extension-guide. 
 
 ## Deploy the Zimlet Sideloader
 
@@ -264,60 +229,68 @@ The index.js in the root of your src folder will be called by Zimbra to load you
 
 ```javascript
 //Load components from Zimbra
-import { createElement } from "preact";
-import { Text } from "preact-i18n";
-import { SLUG } from "./constants";
-import { withIntl } from "./enhancers";
-import { MenuItem } from "@zimbra-client/components";
+import { createElement, Fragment } from 'preact';
+import { Text } from 'preact-i18n';
+import { provide } from 'preact-context-provider';
+import { withIntl } from './enhancers';
+import { MenuItem, GenericMobileUISidebar, GenericMobileUIToolbar } from '@zimbra-client/components'; // Sidebar/Toolbar are so nav menu is accessible in mobile
+import { Button } from '@zimbra-client/blocks';
+import { useCallback } from 'preact/hooks';
 
-//Load the App component from our Zimlet
-import App from "./components/app";
 //Load the createMore function from our Zimlet component
-import createMore from "./components/more";
+import createMore from './components/more';
 
 //Load a style static stylesheet (Preact will not change this)
 import './public/styles.css';
 
+const App = () => {
+    const handleClick = useCallback(() => alert('Test OK!'), []);
+    return (<Fragment>
+        <GenericMobileUIToolbar />
+        <GenericMobileUISidebar />
+        <Button onClick={handleClick}>Zimlet Callback Test</Button>
+		<iframe class={'MyTestWrapper'} src="/service/extension/mytest"/>
+    </Fragment>);
+};
+
 //Create function by Zimbra convention
 export default function Zimlet(context) {
 	//Get the 'plugins' object from context and define it in the current scope
-	const { plugins } = context;
+	const { plugins, store, zimbraBatchClient } = context;
+	const { dispatch, zimletRedux } = store;
 	const exports = {};
-   
-   //moreMenu stores a Zimlet menu item. We pass context to it here
-	const moreMenu = createMore(context, <Text id={`app.menuItem`}/>);
 
-	
 	exports.init = function init() {
 		// The zimlet slots to load into, and what is being loaded into that slot
 		// (CustomMenuItem and Router are both defined below)
-		plugins.register("slot::menu", CustomMenuItem);
+		plugins.register('slot::integrations-tab-item', CustomMenuItem);
 
 		// Only needed if you need to create a new url route, like for a menu tab, or print, etc
-		plugins.register("slot::routes", Router);
-		
+		plugins.register('slot::routes', Router);
+
 		//Here we load the moreMenu Zimlet item into the UI slot:
-		plugins.register('slot::action-menu-mail-more', moreMenu);
+		plugins.register('slot::action-menu-mail-more', provide(context)(createMore));
 
 	};
 
 	// Register a new route with the preact-router instance
 	function Router() {
-		return [<App path={`/${SLUG}`} />];
+		return [<App path={'/integrations/MyTest'} />];
 	}
 
 	// Create a main nav menu item.
-	// withIntl should be used on every component registered via plugins.register().
+	// withIntl should be used on every component registered via plugins.register(). You will see this in the App index.js file as well
 	const CustomMenuItem = withIntl()(() => (
 		// List of components can be found in zm-x-web, zimlet-manager/shims.js, and more can be added if needed
-		<MenuItem responsive href={`/${SLUG}`}>
-			<span className="appIcon"></span><b>
-			<Text id={`app.menuItem`} /></b>
+		<MenuItem responsive href={'/integrations/MyTest'}>
+			<span className='appIconMyTest'></span><b>
+				<Text id={'zimbra-zimlet-mytest.menuItem'} /></b>
 		</MenuItem>
 	));
 
 	return exports;
 }
+
 
 ```
 If you do not understand the use of `<>` and `{}` take a look at the at https://www.udemy.com/course/the-complete-react-fullstack-course/. 
@@ -328,38 +301,11 @@ If you do not understand the use of `<>` and `{}` take a look at the at https://
 The `mytest` item in the More menu is registered in the main index.js with these lines of code:
 
 ```javascript
-import createMore from "./components/more";
-const moreMenu = createMore(context, <Text id={`app.menuItem`}/>);
+import createMore from './components/more';
+...
+plugins.register('slot::action-menu-mail-more', provide(context)(createMore));
 ```
-`<Text>` is a helper component to get a string in the language preferred by the user. See `src/intl/en_US.json`. You can apply the translated strings by the language specific files, such as `src/intl/ja.json`.
-
-createMore is imported from `src/components/more/index.js` and is included here for reference:
-
-```javascript
-import { createElement } from 'preact';
-import MoreMenu from '../more-menu';
-
-export default function createMore(context, menuItemText) {
-	return props => (
-		<MoreMenu {...props}>{{context, menuItemText}}</MoreMenu>
-	);
-}
-```
-
-createMore is a wrapper around another component from our Zimlet called MoreMenu. The reason behind this has to do with the implementation of Zimbra. But also has to do with the difference between functional and class based components in (p)react and what you can pass to them.
-
-The important thing to notice is that `createMore(context, <Text id={`app.menuItem`}/>` is a function call with the arguments *context* and *<text...>*. And those are called *context* and *menuItemText* in the createMore function. Then they are passed as children to the MoreMenu component and the props are passed on from the Zimbra application.
-
-The MoreMenu component in `src/components/more-menu/index.js` takes care of the functionality of the menu but it also does the HTML rendering to actually show it. The *context* and *menuItemText* are stored to the instance of the class in the constructor. To find out what props are passed from Zimbra to the MoreMenu you can add a console.log(this.props) to the code. You will see that this.props.emailData will contain an object with the email data.
-
-```javascript
-export default class MoreMenu extends Component {
-    constructor(props) {
-        super(props);
-        this.zimletContext = props.children.context;
-        this.menuItemText = props.children.menuItemText;
-    };
-```
+createMore is imported from `src/components/more/index.js`.
 
 Open `src/components/more-menu/index.js` to find out how to:
 
@@ -373,28 +319,27 @@ Open `src/components/more-menu/index.js` to find out how to:
 Similar to to more menu a new tab is added to the UI. The `mytest` tab is registered in the main index.js with these lines of code:
 
 ```javascript
-import { SLUG } from "./constants";
-import { MenuItem } from "@zimbra-client/components";
 
-const { plugins } = context;
-plugins.register("slot::menu", CustomMenuItem);
+   plugins.register('slot::integrations-tab-item', CustomMenuItem);
 
-// Register a new route with the preact-router instance
-function Router() {
-   return [<App path={`/${SLUG}`} />];
-}
+	// Register a new route with the preact-router instance
+	function Router() {
+		return [<App path={'/integrations/MyTest'} />];
+	}
 
-// Create a main nav menu item.
-// withIntl should be used on every component registered via plugins.register(). You will see this in the App index.js file as well
-const CustomMenuItem = withIntl()(() => (
-   // List of components can be found in zm-x-web, zimlet-manager/shims.js, and more can be added if needed
-   <MenuItem responsive href={`/${SLUG}`}>
-      <span className="appIcon"></span><b>
-      <Text id={`app.menuItem`} /></b>
-   </MenuItem>
-));
+	// Create a main nav menu item.
+	// withIntl should be used on every component registered via plugins.register(). You will see this in the App index.js file as well
+	const CustomMenuItem = withIntl()(() => (
+		// List of components can be found in zm-x-web, zimlet-manager/shims.js, and more can be added if needed
+		<MenuItem responsive href={'/integrations/MyTest'}>
+			<span className='appIconMyTest'></span><b>
+				<Text id={'zimbra-zimlet-mytest.menuItem'} /></b>
+		</MenuItem>
+	));
 ```
 CustomMenuItem holds the HTML loaded into the slot and has the HTML link to our tab. `<MenuItem>` is a component that returns HTML and SLUG is a static string loaded from `src/constants/index.js`. The Router() function is what ties an instance of App to the url location of our tab.
+
+To find out more about adding menu items to vericals in Zimbra see the AnyFrame Zimlet: https://github.com/Zimbra/zimbra-zimlet-anyframe
 
 
 ## Packaging for Production
